@@ -21,12 +21,26 @@ public class JpaMain {
             member.setAge(10);
             em.persist(member);
 
-            //반환 타입이 명확할 때 사용
-            Member result = em.createQuery("select m from Member m where m.username =:username", Member.class)
-                    .setParameter("username", "member1")
-                    .getSingleResult();
-            
-            System.out.println("singleResult = " + result.getUsername());
+            em.flush();
+            em.clear();
+
+            //엔티티 프로젝션
+//            List<Member> result = em.createQuery("select m from Member m", Member.class)
+//                    .getResultList();
+//            Member findMember = result.get(0);
+//            findMember.setAge(20);
+
+            //엔티티 프로젝션
+//            List<Team> result = em.createQuery("select m from Member m", Team.class)
+//                    .getResultList();
+
+            //임베디드 프로젝션
+            em.createQuery("select o.address from Order o", Address.class)
+                    .getResultList();
+
+            //스칼라 프로젝션
+            em.createQuery("select m.username, m.age from Member m")
+                    .getResultList();
 
             tx.commit();
         } catch (Exception e) {
