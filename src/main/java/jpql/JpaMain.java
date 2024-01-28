@@ -22,12 +22,20 @@ public class JpaMain {
             em.persist(member);
 
             //반환 타입이 명확할 때 사용
-            TypedQuery<Member> query1 = em.createQuery("select m from Member m", Member.class);
-            TypedQuery<String> query2 = em.createQuery("select m.username from Member m", String.class);
+            TypedQuery<Member> query = em.createQuery("select m from Member m", Member.class);
 
-            //반환 타입이 명확하지 않을 때 사용
-            Query query3 = em.createQuery("select m.username, m.age from Member m");
+            //결과 조회 API
+            //1. 리스트 반환 - 결과가 1개 이상일 때
+            List<Member> resultList = query.getResultList();
 
+            for (Member member1 : resultList) {
+                System.out.println("member1 = " + member1);
+            }
+
+            //2. 단일 객체 반환 - 결과가 1개일 때
+            Member result = query.getSingleResult();
+            System.out.println("result = " + result);
+            
             tx.commit();
         } catch (Exception e) {
             tx.rollback();
