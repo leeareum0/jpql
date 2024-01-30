@@ -43,11 +43,11 @@ public class JpaMain {
             em.clear();
 
             //엔티티 직접 사용 - 기본 키 값
-            //파라미터로 전달
-            String query = "select m from Member m where m = :member";
+            //식별자를 직접 전달
+            String query = "select m from Member m where m.id = :memberId";
 
             Member findMember = em.createQuery(query, Member.class)
-                    .setParameter("member", member1)
+                    .setParameter("memberId", member1.getId())
                     .getSingleResult();
 
             System.out.println("findMember = " + findMember);
