@@ -42,19 +42,15 @@ public class JpaMain {
             em.flush();
             em.clear();
 
-            //일대다 관계, 컬렉션 페치 조인 + distinct 중복 제거
-            String query = "select distinct t from Team t join fetch t.members";
+            //엔티티 직접 사용 - 기본 키 값
+            //파라미터로 전달
+            String query = "select m from Member m where m = :member";
 
-            List<Team> result = em.createQuery(query, Team.class).getResultList();
+            Member findMember = em.createQuery(query, Member.class)
+                    .setParameter("member", member1)
+                    .getSingleResult();
 
-            System.out.println("result = " + result.size());
-
-            for (Team team : result) {
-                System.out.println("team = " + team.getName() + "|members=" + team.getMembers().size());
-                for (Member member : team.getMembers()) {
-                    System.out.println("-> member = " + member);
-                }
-            }
+            System.out.println("findMember = " + findMember);
 
             tx.commit();
         } catch (Exception e) {
