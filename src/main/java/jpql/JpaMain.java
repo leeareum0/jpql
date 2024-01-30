@@ -42,15 +42,16 @@ public class JpaMain {
             em.flush();
             em.clear();
 
-            //엔티티 직접 사용 - 기본 키 값
-            //식별자를 직접 전달
-            String query = "select m from Member m where m.id = :memberId";
+            //엔티티 직접 사용 - 외래 키 값
+            String query = "select m from Member m where m.team = :team";
 
-            Member findMember = em.createQuery(query, Member.class)
-                    .setParameter("memberId", member1.getId())
-                    .getSingleResult();
+            List<Member> members = em.createQuery(query, Member.class)
+                    .setParameter("team", teamA)
+                    .getResultList();
 
-            System.out.println("findMember = " + findMember);
+            for (Member member : members) {
+                System.out.println("member = " + member);
+            }
 
             tx.commit();
         } catch (Exception e) {
